@@ -7,7 +7,7 @@ import (
 var logger *logrus.Logger
 
 // log객체 setting
-func init() {
+func LogSetting() {
 	logger = logrus.New()
 	// logger.SetLevel(config.LogLevel)
 	logger.SetFormatter(&logrus.TextFormatter{
@@ -17,5 +17,6 @@ func init() {
 }
 
 func GetLogger() *logrus.Logger {
+	LogSetting()
 	return logger
 }

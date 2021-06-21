@@ -5,16 +5,16 @@ import (
 )
 
 type Config struct {
-	Period    string `yaml: "period"`
-	BrickURL  string `yaml: "brick_url"`
-	Namespace string `yaml: "namespace"`
-	LogLevel  string `yaml: "loglevel"`
+	Period    string
+	BrickURL  string
+	Namespace string
+	LogLevel  string
 }
 
 var config Config
 
 // configmap -> env 읽어서 객체로 저장
-func main() {
+func ConfigSetting() {
 
 	config.Period = os.Getenv("period")
 	config.LogLevel = os.Getenv("log_level")
@@ -24,5 +24,6 @@ func main() {
 }
 
 func GetConfig() Config {
+	ConfigSetting()
 	return config
 }
