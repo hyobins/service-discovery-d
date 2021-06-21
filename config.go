@@ -1,12 +1,7 @@
 package main
 
 import (
-	"context"
-	"fmt"
-
-	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/client-go/kubernetes"
-	"k8s.io/client-go/tools/clientcmd"
+	"os"
 )
 
 type Config struct {
@@ -18,20 +13,14 @@ type Config struct {
 
 var config Config
 
+// configmap -> env 읽어서 객체로 저장
 func main() {
-	config, err := clientcmd.BuildConfigFromFlags("", "<path-to-kubeconfig>")
-	if err != nil {
-		fmt.Errorf("ERROR: ", err)
-	}
 
-	clientset, err := kubernetes.NewForConfig(config)
-	if err != nil {
-		fmt.Errorf("ERROR: ", err)
-	}
-	// 파드를 나열하기 위해 API에 접근한다
-	pods, _ := clientset.CoreV1().Pods("").List(context.TODO(), v1.ListOptions{})
+	config.Period = os.Getenv("period")
+	config.LogLevel = os.Getenv("log_level")
+	config.BrickURL = "/api/container/info"
+	config.Namespace = os.Getenv("namespace")
 
-	fmt.Printf("There are %d pods in the cluster\n", len(pods.Items))
 }
 
 func GetConfig() Config {

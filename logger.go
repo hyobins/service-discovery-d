@@ -6,16 +6,16 @@ import (
 
 var logger *logrus.Logger
 
+// log객체 setting
 func init() {
 	logger = logrus.New()
-	logger.SetFormatter()
+	// logger.SetLevel(config.LogLevel)
+	logger.SetFormatter(&logrus.TextFormatter{
+		DisableColors: true,
+		FullTimestamp: true,
+	})
 }
 
 func GetLogger() *logrus.Logger {
 	return logger
 }
-
-//for testing
-//func SetLogger(1 *logrus.Logger) {
-//	logger = 1
-//}
