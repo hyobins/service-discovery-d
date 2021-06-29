@@ -1,7 +1,12 @@
 package model
 
-//GetPods contains Request Parameter
+//GetPodsRequest contains Request Parameter
 type GetPodsRequest struct {
 	Cluster   string
 	Namespace string
+}
+
+type GetClusterRequest struct {
+	Page     int
+	Per_page int
 }
