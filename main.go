@@ -1,12 +1,20 @@
 package main
 
 import (
+	"net/http"
+
+	"github.com/gorilla/mux"
 	"github.com/hyobins/service-discovery/cmd"
 	"github.com/sirupsen/logrus"
 )
 
+func http
+
 func main() {
-	config := GetConfig()
+	config := GetConig()
+	r := mux.NewRouter()
+	r.HandleFunc("/",
+	http.ListenAndServe(":8080", r)
 
 	//로그 객체 초기화
 	logger := GetLogger()

@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/hyobins/service-discovery/model"
 
@@ -27,7 +26,7 @@ var statusGetCmd = &cobra.Command{
 		//getRange, _ := command.Flags().GetString("range")
 		fmt.Println("get!! ")
 
-		client := model.NewClient("addr") //IRIS-CLOUD IP address
+		client := model.NewClient("http://192.168.102.114:32080") //IRIS-CLOUD IP address
 
 		clusterReq := model.GetClusterRequest{
 			Page:     0,
@@ -36,14 +35,15 @@ var statusGetCmd = &cobra.Command{
 		clusterID, err := client.GetCluster(&clusterReq)
 
 		podReq := model.GetPodsRequest{ //IRIS-CLOUD request
-			Cluster:   clusterID,
-			Namespace: os.Getenv("POD_NAMESPACE"),
+			Cluster: clusterID,
+			//Namespace: os.Getenv("POD_NAMESPACE"),
+			Namespace: "iris-cloud",
 		}
 
 		result, err := client.GetPods(&podReq)
 		if err != nil {
 			fmt.Printf("Failed to Get Pods from Iris-cloud. ERROR: %s", err.Error())
 		}
-		fmt.Printf(result)
+		fmt.Println(result)
 	},
 }

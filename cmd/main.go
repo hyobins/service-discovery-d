@@ -8,7 +8,7 @@ var rootCmd = &cobra.Command{
 	Use:   "service-discovery",
 	Short: "Service Discovery is blah bla",
 	Run: func(cmd *cobra.Command, args []string) {
-		serverCmd.RunE(cmd, args)
+		//serverCmd.RunE(cmd, args)
 	},
 }
 

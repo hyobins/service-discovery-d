@@ -27,7 +27,8 @@ func ConfigSetting() {
 		config.LogLevel = logrus.WarnLevel
 	}
 	config.BrickURL = "/api/container/info"
-	config.Namespace = os.Getenv("NAMESPACE")
+	//config.Namespace = os.Getenv("NAMESPACE")
+	config.Namespace = "iris-cloud"
 }
 
 func GetConfig() Config {

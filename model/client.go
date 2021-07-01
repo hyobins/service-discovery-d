@@ -62,21 +62,23 @@ func (c *Client) GetPods(req *GetPodsRequest) (string, error) {
 }
 
 func (c *Client) GetCluster(req *GetClusterRequest) (string, error) {
-	resp, err := c.doPost(c.buildURL("/api/cluster"), req)
+	resp, err := c.doGet(c.buildURL("/api/cluster"))
 	if err != nil {
+		fmt.Printf("ERROR with %s", err)
 		return "", err
 	}
 	defer closeBody(resp)
-	m := make(map[string]interface{})
 
 	switch resp.StatusCode {
 	case http.StatusOK:
+
+		m := []map[string]interface{}{}
 		bytes, _ := ioutil.ReadAll(resp.Body)
 		err := json.Unmarshal(bytes, &m)
 		if err != nil {
-			fmt.Print("ERROR", err)
+			fmt.Print("Unmarshal ERROR: ", err)
 		}
-		clusterID, _ := json.Marshal(m["id"])
+		clusterID, _ := json.Marshal(m[0]["id"])
 		return string(clusterID), nil
 	default:
 		return "", errors.Errorf("failed with status code %d", resp.StatusCode)
