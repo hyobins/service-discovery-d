@@ -45,8 +45,9 @@ func (c *Client) buildURL(urlPath string, args ...interface{}) string {
 	return fmt.Sprintf("%s%s", c.address, fmt.Sprintf(urlPath, args...))
 }
 
-func (c *Client) GetPods(req *GetPodsRequest) (string, error) {
-	resp, err := c.doPost(c.buildURL("/apiv2/state/pods"), req)
+//GetCluster 는 외부에서 해당 경로 요청시 내부 서버에서 처리해주는 router
+func (c *Client) GetCluster(req *GetClusterRequest) (string, error) {
+	resp, err := c.doGet(c.buildURL("/api/iriscloud/get"))
 	if err != nil {
 		return "", err
 	}
@@ -57,30 +58,46 @@ func (c *Client) GetPods(req *GetPodsRequest) (string, error) {
 		bytes, _ := ioutil.ReadAll(resp.Body)
 		return string(bytes), nil
 	default:
-		return "", errors.Errorf("failed with status code %d", resp.StatusCode)
+		return "", errors.Errorf("failed with statuscode %d", resp.StatusCode)
 	}
 }
 
-func (c *Client) GetCluster(req *GetClusterRequest) (string, error) {
-	resp, err := c.doGet(c.buildURL("/api/cluster"))
-	if err != nil {
-		fmt.Printf("ERROR with %s", err)
-		return "", err
-	}
-	defer closeBody(resp)
+// func (c *Client) GetPods(req *GetPodsRequest) (string, error) {
+// 	resp, err := c.doPost(c.buildURL("/apiv2/state/pods"), req)
+// 	if err != nil {
+// 		return "", err
+// 	}
+// 	defer closeBody(resp)
 
-	switch resp.StatusCode {
-	case http.StatusOK:
+// 	switch resp.StatusCode {
+// 	case http.StatusOK:
+// 		bytes, _ := ioutil.ReadAll(resp.Body)
+// 		return string(bytes), nil
+// 	default:
+// 		return "", errors.Errorf("failed with status code %d", resp.StatusCode)
+// 	}
+// }
 
-		m := []map[string]interface{}{}
-		bytes, _ := ioutil.ReadAll(resp.Body)
-		err := json.Unmarshal(bytes, &m)
-		if err != nil {
-			fmt.Print("Unmarshal ERROR: ", err)
-		}
-		clusterID, _ := json.Marshal(m[0]["id"])
-		return string(clusterID), nil
-	default:
-		return "", errors.Errorf("failed with status code %d", resp.StatusCode)
-	}
-}
+// func (c *Client) GetCluster(req *GetClusterRequest) (string, error) {
+// 	resp, err := c.doGet(c.buildURL("/api/cluster"))
+// 	if err != nil {
+// 		fmt.Printf("ERROR with %s", err)
+// 		return "", err
+// 	}
+// 	defer closeBody(resp)
+
+// 	switch resp.StatusCode {
+// 	case http.StatusOK:
+
+// 		m := []map[string]interface{}{}
+// 		bytes, _ := ioutil.ReadAll(resp.Body)
+// 		err := json.Unmarshal(bytes, &m)
+// 		if err != nil {
+// 			fmt.Print("Unmarshal ERROR: ", err)
+// 		}
+// 		clusterID, _ := json.Marshal(m[0]["id"])
+// 		return string(clusterID), nil
+// 	default:
+// 		return "", errors.Errorf("failed with status code %d", resp.StatusCode)
+// 	}
+// }

@@ -5,15 +5,16 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/hyobins/service-discovery/cmd"
+	"github.com/hyobins/service-discovery/internal/api"
 	"github.com/sirupsen/logrus"
 )
 
-func http
-
 func main() {
-	config := GetConig()
+	//Config Setting
+	config := GetConfig()
+
 	r := mux.NewRouter()
-	r.HandleFunc("/",
+	api.Register(r, &api.Context{})
 	http.ListenAndServe(":8080", r)
 
 	//로그 객체 초기화

@@ -24,9 +24,9 @@ var statusGetCmd = &cobra.Command{
 	Short: "get status information",
 	Run: func(cmd *cobra.Command, args []string) {
 		//getRange, _ := command.Flags().GetString("range")
-		fmt.Println("get!! ")
 
-		client := model.NewClient("http://192.168.102.114:32080") //IRIS-CLOUD IP address
+		// client := model.NewClient("http://192.168.102.114:32080") //IRIS-CLOUD IP address
+		client := model.NewClient("http://localhost:8080") // 내부 서버 IP
 
 		clusterReq := model.GetClusterRequest{
 			Page:     0,
@@ -34,16 +34,16 @@ var statusGetCmd = &cobra.Command{
 		}
 		clusterID, err := client.GetCluster(&clusterReq)
 
-		podReq := model.GetPodsRequest{ //IRIS-CLOUD request
-			Cluster: clusterID,
-			//Namespace: os.Getenv("POD_NAMESPACE"),
-			Namespace: "iris-cloud",
-		}
+		// podReq := model.GetPodsRequest{ //IRIS-CLOUD request
+		// 	Cluster: clusterID,
+		// 	//Namespace: os.Getenv("POD_NAMESPACE"),
+		// 	Namespace: "iris-cloud",
+		// }
 
-		result, err := client.GetPods(&podReq)
+		// result, err := client.GetPods(&podReq)
 		if err != nil {
 			fmt.Printf("Failed to Get Pods from Iris-cloud. ERROR: %s", err.Error())
 		}
-		fmt.Println(result)
+		fmt.Println(clusterID)
 	},
 }
