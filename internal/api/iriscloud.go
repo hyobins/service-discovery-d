@@ -2,9 +2,11 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/hyobins/service-discovery/internal/iriscloud"
 	"github.com/hyobins/service-discovery/model"
 )
 
@@ -13,7 +15,7 @@ func initIrisCloud(apiRouter *mux.Router, context *Context) {
 		return newContextHandler(context, handler)
 	}
 
-	iriscloudRouter := apiRouter.PathPrefix("iriscloud").Subrouter()
+	iriscloudRouter := apiRouter.PathPrefix("/iriscloud").Subrouter()
 	iriscloudRouter.Handle("/get", addContext(handleGetIrisCloud)).Methods("GET")
 }
 
@@ -23,7 +25,12 @@ func handleGetIrisCloud(c *Context, w http.ResponseWriter, r *http.Request) {
 		c.Logger.WithError(err).Error("Failed to decode get iriscloud cluster ID")
 	}
 
-	result, _ := c.Store.GetCluster(request)
+	result, err := iriscloud.GetClusterI(request)
+
+	if err != nil {
+		fmt.Print(err)
+		c.Logger.WithError(err).Error("Failed to use  getcluster api")
+	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	encoder := json.NewEncoder(w)
@@ -32,5 +39,7 @@ func handleGetIrisCloud(c *Context, w http.ResponseWriter, r *http.Request) {
 	if errs != nil {
 		c.Logger.WithError(err).Error("failed to decode result")
 	}
+
+	fmt.Println(result)
 
 }

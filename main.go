@@ -15,7 +15,6 @@ func main() {
 
 	r := mux.NewRouter()
 	api.Register(r, &api.Context{})
-	http.ListenAndServe(":8080", r)
 
 	//로그 객체 초기화
 	logger := GetLogger()
@@ -27,4 +26,5 @@ func main() {
 	}).Info("Configuration Information")
 
 	cmd.Execute()
+	http.ListenAndServe(":8080", r)
 }

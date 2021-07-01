@@ -18,9 +18,7 @@ func closeBody(r *http.Response) {
 }
 
 //iriscloud에 접속하여 받아오기,,
-func GetCluster(request *model.GetClusterRequest) (string, error) {
-
-	//resp, err := c.doGet(c.buildURL("/api/cluster"))
+func GetClusterI(request *model.GetClusterRequest) (string, error) {
 	resp, err := http.Get("http://192.168.102.114:32080/api/cluster")
 	if err != nil {
 		fmt.Printf("ERROR with %s", err)
