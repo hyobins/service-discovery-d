@@ -62,21 +62,21 @@ func (c *Client) GetCluster(req *GetClusterRequest) (string, error) {
 	}
 }
 
-// func (c *Client) GetPods(req *GetPodsRequest) (string, error) {
-// 	resp, err := c.doPost(c.buildURL("/apiv2/state/pods"), req)
-// 	if err != nil {
-// 		return "", err
-// 	}
-// 	defer closeBody(resp)
+func (c *Client) GetPods(req *GetPodsRequest) (string, error) {
+	resp, err := c.doPost(c.buildURL("/api/iriscloud/getpods"), req)
+	if err != nil {
+		return "", err
+	}
+	defer closeBody(resp)
 
-// 	switch resp.StatusCode {
-// 	case http.StatusOK:
-// 		bytes, _ := ioutil.ReadAll(resp.Body)
-// 		return string(bytes), nil
-// 	default:
-// 		return "", errors.Errorf("failed with status code %d", resp.StatusCode)
-// 	}
-// }
+	switch resp.StatusCode {
+	case http.StatusOK:
+		bytes, _ := ioutil.ReadAll(resp.Body)
+		return string(bytes), nil
+	default:
+		return "", errors.Errorf("failed with status code %d", resp.StatusCode)
+	}
+}
 
 // func (c *Client) GetCluster(req *GetClusterRequest) (string, error) {
 // 	resp, err := c.doGet(c.buildURL("/api/cluster"))

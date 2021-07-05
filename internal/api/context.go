@@ -6,8 +6,8 @@ import (
 )
 
 type Store interface {
-	GetClusterI(request *model.GetClusterRequest) (string, error)
-	//GetPods(request *model.GetPodsRequest) (string, error)
+	GetClusterID(request *model.GetClusterRequest) (string, error)
+	GetPodResource(request *model.GetPodsRequest) (string, error)
 }
 
 type Context struct {

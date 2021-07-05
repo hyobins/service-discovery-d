@@ -17,6 +17,7 @@ func initIrisCloud(apiRouter *mux.Router, context *Context) {
 
 	iriscloudRouter := apiRouter.PathPrefix("/iriscloud").Subrouter()
 	iriscloudRouter.Handle("/get", addContext(handleGetIrisCloud)).Methods("GET")
+	iriscloudRouter.Handle("/getpods", addContext(handlerGetPodResource)).Methods("POST")
 }
 
 func handleGetIrisCloud(c *Context, w http.ResponseWriter, r *http.Request) {
@@ -25,7 +26,7 @@ func handleGetIrisCloud(c *Context, w http.ResponseWriter, r *http.Request) {
 		c.Logger.WithError(err).Error("Failed to decode get iriscloud cluster ID")
 	}
 
-	result, err := iriscloud.GetClusterI(request)
+	result, err := iriscloud.GetClusterID(request)
 
 	if err != nil {
 		fmt.Print(err)
@@ -39,7 +40,28 @@ func handleGetIrisCloud(c *Context, w http.ResponseWriter, r *http.Request) {
 	if errs != nil {
 		c.Logger.WithError(err).Error("failed to decode result")
 	}
+}
 
-	fmt.Println(result)
+func handlerGetPodResource(c *Context, w http.ResponseWriter, r *http.Request) {
+	request, err := model.GetPodsRequestFromReader(r.Body)
+	if err != nil {
+		c.Logger.WithError(err).Error("Failed to decode get iriscloud pod resource")
+	}
 
+	result, err := iriscloud.GetPodResource(request)
+	if err != nil {
+		fmt.Print(err)
+		c.Logger.WithError(err).Error("Failed to use GetPodResource api")
+	}
+
+	w.Header().Set("content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	encoder := json.NewEncoder(w)
+
+	errs := encoder.Encode(result)
+	if errs != nil {
+		c.Logger.WithError(err).Error("Failed to decode result")
+	}
+
+	fmt.Printf("Pod Resource: %s\n", result)
 }
