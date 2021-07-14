@@ -40,7 +40,7 @@ func GetClusterID(request *model.GetClusterRequest) (string, error) {
 		clusterID := strings.Trim(string(result), "\"")
 		return clusterID, nil
 	default:
-		return "", errors.Errorf("failed with status code %d", resp.StatusCode)
+		return "", errors.Errorf("Failed with status code %d", resp.StatusCode)
 	}
 }
 

@@ -1,30 +1,21 @@
 package main
 
 import (
-	"net/http"
+	"os"
 
-	"github.com/gorilla/mux"
 	"github.com/hyobins/service-discovery/cmd"
-	"github.com/hyobins/service-discovery/internal/api"
 	"github.com/sirupsen/logrus"
 )
 
+var log = logrus.New()
+
 func main() {
-	//Config Setting
-	config := GetConfig()
-
-	r := mux.NewRouter()
-	api.Register(r, &api.Context{})
-
-	//로그 객체 초기화
-	logger := GetLogger()
-	// logger.SetLevel(config.LogLevel)
-	logger.WithFields(logrus.Fields{
-		"period":    config.Period,
-		"namespace": config.Namespace,
-		"brickURL":  config.BrickURL,
-	}).Info("Configuration Information")
-
 	cmd.Execute()
-	http.ListenAndServe(":8080", r)
+	log.SetOutput(os.Stdout)
+	Formatter := new(logrus.TextFormatter)
+	Formatter.DisableColors = true
+	Formatter.FullTimestamp = true
+	Formatter.PadLevelText = true
+	Formatter.FullTimestamp = true
+	log.SetFormatter(Formatter)
 }

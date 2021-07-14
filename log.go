@@ -1,22 +1,30 @@
 package main
 
 import (
+	"os"
+
 	"github.com/sirupsen/logrus"
 )
 
 var logger *logrus.Logger
 
-// log객체 setting
-func LogSetting() {
-	logger = logrus.New()
-	// logger.SetLevel(config.LogLevel)
-	logger.SetFormatter(&logrus.TextFormatter{
-		DisableColors: true,
-		FullTimestamp: true,
-	})
+func LogSetting() *logrus.Logger {
+	Logger := logrus.New()
+	Logger.SetReportCaller(true)
+	Logger.SetOutput(os.Stdout)
+
+	Formatter := new(logrus.TextFormatter)
+
+	Formatter.DisableColors = true
+	Formatter.FullTimestamp = true
+	Formatter.PadLevelText = true
+	Formatter.FullTimestamp = true
+	Logger.SetFormatter(Formatter)
+
+	return Logger
 }
 
 func GetLogger() *logrus.Logger {
-	LogSetting()
-	return logger
+	Logger := LogSetting()
+	return Logger
 }
