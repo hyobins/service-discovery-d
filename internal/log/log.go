@@ -11,7 +11,7 @@ import (
 
 var Logger *logrus.Logger
 
-func NewLogger() *logrus.Logger {
+func init() {
 	Logger := logrus.New()
 	Logger.SetReportCaller(true)
 	Logger.SetOutput(os.Stdout)
@@ -28,10 +28,9 @@ func NewLogger() *logrus.Logger {
 		return "", retFile
 	}
 	Logger.SetFormatter(Formatter)
-	return Logger
 }
 
-func GetLogger() *logrus.Logger {
+func GetLogInstance() *logrus.Logger {
 	return Logger
 }
 

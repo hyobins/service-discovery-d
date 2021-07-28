@@ -15,14 +15,17 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var log = logrus.New()
+var Logger *logrus.Logger
 
 var serverCmd = &cobra.Command{
 	Use:   "server",
 	Short: "Running Service-Discovery Server",
 	Run: func(cmd *cobra.Command, args []string) {
 		config := model.GetConfig()
-		log.WithFields(logrus.Fields{
+
+		//Logger = sdlog.GetLogInstance()
+		logrus.SetLevel(logrus.DebugLevel)
+		logrus.WithFields(logrus.Fields{
 			"period":    config.Period,
 			"namespace": config.Namespace,
 			"brickURL":  config.BrickURL,
@@ -39,7 +42,7 @@ var serverCmd = &cobra.Command{
 				WriteTimeout:   10 * time.Second,
 				MaxHeaderBytes: 1 << 20,
 			}
-			log.WithField("addr", s.Addr).Info("Listening")
+			logrus.WithField("addr", s.Addr).Info("Listening")
 			s.ListenAndServe()
 		}()
 
@@ -57,7 +60,7 @@ var serverCmd = &cobra.Command{
 				}
 				model.SetCache("data", clusterinfo)
 				//c.Set("data", data, cache.DefaultExpiration)
-				log.Info("Cached ClusterInfo")
+				logrus.Info("Cached ClusterInfo")
 				time.Sleep(3 * time.Second)
 			}
 		}()
@@ -66,7 +69,7 @@ var serverCmd = &cobra.Command{
 		signal.Notify(ch, os.Interrupt, syscall.SIGKILL, syscall.SIGHUP, syscall.SIGTERM)
 
 		<-ch
-		log.Info("Shutting Down")
+		logrus.Info("Shutting Down")
 
 	},
 }
